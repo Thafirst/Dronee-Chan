@@ -362,3 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /Dronee-Chan 2/Discord Bot/Config.json
+/Dronee-Chan 2/bin/Debug/net8.0/Config.json
