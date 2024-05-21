@@ -1,4 +1,5 @@
 ﻿using Dronee_Chan_2.Discord_Bot.Commands.SlashCommands;
+using Dronee_Chan_2.Discord_Bot.Controllers;
 using Dronee_Chan_2.Discord_Bot.Database;
 using Dronee_Chan_2.Discord_Bot.Events;
 using Dronee_Chan_2.Discord_Bot.Objects.UserObjects;
@@ -29,6 +30,8 @@ namespace Dronee_Chan_2.Discord_Bot
         public CommandsNextExtension Commands {  get; private set; }
 
         DatabaseManager databaseManager { get; set; }
+
+        ItemController IC;
 
 
         public Bot()
@@ -80,7 +83,7 @@ namespace Dronee_Chan_2.Discord_Bot
             SlashCommandsConfig.RegisterCommands<DatabaseGetUserCommand>(1006058186136096798);
             SlashCommandsConfig.RegisterCommands<DonateCommand>(1006058186136096798);
             SlashCommandsConfig.RegisterCommands<FixBondsMessageCommand>(1006058186136096798);
-            SlashCommandsConfig.RegisterCommands<FixContractMessageCommand>(1006058186136096798);
+            SlashCommandsConfig.RegisterCommands<EditMessageCommand>(1006058186136096798);
             SlashCommandsConfig.RegisterCommands<GiveBondsCommand>(1006058186136096798);
             SlashCommandsConfig.RegisterCommands<GiveItemCommand>(1006058186136096798);
             SlashCommandsConfig.RegisterCommands<HelpCommand>(1006058186136096798);
@@ -110,6 +113,8 @@ namespace Dronee_Chan_2.Discord_Bot
         public async Task RunAsync()
         {
             await Client.ConnectAsync();
+
+            IC = new ItemController(await Client.GetGuildAsync(1006058186136096798));
 
             await Task.Delay(-1);
         }

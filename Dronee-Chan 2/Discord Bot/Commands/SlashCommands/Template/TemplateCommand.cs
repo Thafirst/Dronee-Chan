@@ -23,4 +23,4 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands.Template
         }
     }
 }
-}
+

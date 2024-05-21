@@ -32,7 +32,7 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
 
             User user = await EventManager.LoadUserEvent(UUID);
 
-            await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent($"Loaded the user for ID {user.DiscordUUID} which has a last seen date of {user.LastSeen}"));
+            await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent(user.ToJson()));
         }
     }
 }

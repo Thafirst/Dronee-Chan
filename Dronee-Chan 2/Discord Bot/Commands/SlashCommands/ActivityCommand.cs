@@ -45,7 +45,7 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
                     time = 180;
                 if (span.TotalDays >= time)
                 {
-                    message += member.Username + " has not been seen for " + time + " days.";
+                    message += member.Mention + " has not been seen for " + time + " days.";
                 }
 
 

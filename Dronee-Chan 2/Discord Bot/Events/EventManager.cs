@@ -11,6 +11,7 @@ namespace Dronee_Chan_2.Discord_Bot.Events
     public delegate void SaveUserEventHandler(User user);
     public delegate Task<User> LoadUserEventHandler(ulong id);
     public delegate Task<Item> GetItemEventHandler(string Name);
+    public delegate Task<List<Item>> GetAllItemsEventHandler();
 
     internal class EventManager
     {
@@ -53,7 +54,22 @@ namespace Dronee_Chan_2.Discord_Bot.Events
             if (GetItemEventRaised != null)
             {
                 // Raise the event
-                return GetItemEventRaised(Name);
+                return GetItemEventRaised(Name.TrimEnd(' '));
+            }
+            return null;
+        }
+
+        // Define the event
+        public static event GetAllItemsEventHandler GetAllItemsEventRaised;
+
+        // Method to raise the event
+        public static Task<List<Item>> GetAllItems()
+        {
+            // Check if there are any subscribers to the event
+            if (GetAllItemsEventRaised != null)
+            {
+                // Raise the event
+                return GetAllItemsEventRaised();
             }
             return null;
         }

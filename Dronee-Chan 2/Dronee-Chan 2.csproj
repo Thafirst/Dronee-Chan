@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="bin\Debug\net8.0\Config.json" />
+    <Content Include="bin\Debug\net8.0\Config.json" />
   </ItemGroup>
 
   <ItemGroup>

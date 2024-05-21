@@ -20,6 +20,7 @@ namespace Dronee_Chan_2.Discord_Bot.Objects.UserObjects
         public int StreakCounter { get; set; }   // Streak counter
         public List<string> Achievements { get; set; }  // User's achievements
         public List<string> OnboardingQuestChoices { get; set; }  // Onboarding quest choices
+        public bool Infected { get; set; }  // If the user if infected
 
 
         public User() { }
@@ -38,6 +39,7 @@ namespace Dronee_Chan_2.Discord_Bot.Objects.UserObjects
             StreakCounter = deserializedUser.StreakCounter;
             Achievements = deserializedUser.Achievements;
             OnboardingQuestChoices = deserializedUser.OnboardingQuestChoices;
+            Infected = deserializedUser.Infected;
         }
         [JsonConstructor]
         public User(ulong discordUUID)
@@ -52,6 +54,7 @@ namespace Dronee_Chan_2.Discord_Bot.Objects.UserObjects
             StreakCounter = 0;
             Achievements = new List<string>();
             OnboardingQuestChoices = new List<string>();
+            Infected = false;
         }
         public string ToJson()
         {

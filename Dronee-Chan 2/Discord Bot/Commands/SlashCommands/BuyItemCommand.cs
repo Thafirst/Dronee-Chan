@@ -1,4 +1,5 @@
 ﻿using Dronee_Chan_2.Discord_Bot.Attributes;
+using Dronee_Chan_2.Discord_Bot.Events;
 using Dronee_Chan_2.Discord_Bot.Objects.UserObjects;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
@@ -13,60 +14,45 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
 {
     internal class BuyItemCommand : ApplicationCommandModule
     {
-        [SlashCommand("BuyItem", "Buys the item with the supplied ID")]
-        [RequireRolesSlash(RoleCheckMode.Any, "Staff+")]
+        [SlashCommand("BuyItem", "Buys the item with the supplied Name")]
+        [RequireRolesSlash(RoleCheckMode.Any, "Member", "Staff", "Staff+")]
         [RequireSpecificGuildSlash(GuildCheckMode.Any, 734214744818581575, 1006058186136096798)]
-        public async Task BuyItem(InteractionContext ctx, [Option("Name", "The Name of the item you wish to buy", true)]string item, [Option("Amount", "The amount of the item you want", false)]long LAmount)
+        public async Task BuyItem(InteractionContext ctx, [Option("Name", "The Name of the item you wish to buy", true)]string item, [Option("Amount", "The amount of the item you want", false)]long LAmount = 1)
         {
             await ctx.DeferAsync();
 
             int amount = (int)LAmount;
 
-            item = item.TrimEnd(' ');
-
             ulong id = ctx.User.Id;
 
+            var Item = await EventManager.GetItem(item);
 
-            if (!Program.IM.isID(item))
+            if (Item == null)
             {
-                item = Program.IM.getIdFromName(item);
-                if (item == "")
-                {
-                    await Context.Message.ReplyAsync("I could not find the item with the given ID or name.");
-                    return;
-                }
-            }
-
-            int price = (Program.IM.getItemPrice(item)) * amount;
-
-            if (!(Program.CurrencyList[id] >= price))
-            {
-                await Context.Message.ReplyAsync("You cannot afford " + amount + "x " + Program.IM.getItemFromID(item).name + ", it cost R$" + price);
+                await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent("I could not find the item with the given name."));
                 return;
             }
 
+            User user = await EventManager.LoadUserEvent(id);
 
-            bool success = Program.IM.addToInventory(id, item, amount);
-            if (!success)
+            if(user.Currency < Item.BuyPrice * amount)
             {
-                await Context.Message.ReplyAsync("Something went wrong while trying to add the item, maybe they dont have space for the items.");
+                await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent("You cannot afford " + amount + "x " + Item.Name + ", it costs R$" + Item.BuyPrice * amount));
                 return;
             }
-            Program.CurrencyList[id] -= (Program.IM.getItemPrice(item) * amount);
-            await Context.Message.ReplyAsync(amount + "x " + Program.IM.getItemFromID(item).name + " has been added to " + Context.Guild.GetUser(id).Username + "(-R$" + Program.IM.getItemPrice(item) * amount + ")");
-            saveInventories();
-            Program.MDM.saveCurrencyDictionary();
 
-            User user = Program.Users[id];
-            user.setCurrency(user.getCurrency() - (Program.IM.getItemPrice(item) * amount));
-            await Program.PC.saveUsers(user);
+            if(user.Inventory.Count > 15 - amount)
+            {
+                await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent("You do not have enough inventory slots for " + amount + " items."));
+                return;
+            }
 
-            await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent("Pong"));
-        }
+            user.AddToInventory(Item.ID.ToString());
+            user.Currency -= amount * Item.BuyPrice;
 
-        private Item getItem(string name)
-        {
-            
+            EventManager.SaveUserEvent(user);
+
+            await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent(amount + "x " + Item.Name + " has been added to your inventory."));
         }
     }
 }
