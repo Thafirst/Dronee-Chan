@@ -32,6 +32,8 @@ namespace Dronee_Chan_2.Discord_Bot
         DatabaseManager databaseManager { get; set; }
 
         ItemController IC;
+        BondsController BC;
+        MessageController MC;
 
 
         public Bot()
@@ -115,6 +117,8 @@ namespace Dronee_Chan_2.Discord_Bot
             await Client.ConnectAsync();
 
             IC = new ItemController(await Client.GetGuildAsync(1006058186136096798));
+            BC = new BondsController(await Client.GetGuildAsync(1006058186136096798));
+            MC = new MessageController(await Client.GetGuildAsync(1006058186136096798));
 
             await Task.Delay(-1);
         }
