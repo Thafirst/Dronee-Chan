@@ -22,6 +22,7 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
             DiscordGuild = discordGuild;
             EventManager.GetItemEventRaised += EventManager_GetItemEventRaised;
             EventManager.GetAllItemsEventRaised += EventManager_GetAllItemsEventRaised;
+            EventManager.GetItemByIDEventRaised += EventManager_GetItemByIDEventRaised;
         }
 
         private async Task<List<Item>> EventManager_GetAllItemsEventRaised()
@@ -48,6 +49,21 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
             {
                 Item item = ConvertFromMessage(message);
                 if (item != null && item.Name == Name)
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
+
+        private async Task<Item> EventManager_GetItemByIDEventRaised(int ID)
+        {
+            var messages = DiscordGuild.GetChannel(1072677862227857498).GetMessagesAsync(limit: 500);
+
+            await foreach (DiscordMessage message in messages)
+            {
+                Item item = ConvertFromMessage(message);
+                if (item != null && item.ID == ID)
                 {
                     return item;
                 }

@@ -12,6 +12,7 @@ namespace Dronee_Chan_2.Discord_Bot.Events
     public delegate void SaveUserEventHandler(User user);
     public delegate Task<User> LoadUserEventHandler(ulong id);
     public delegate Task<Item> GetItemEventHandler(string Name);
+    public delegate Task<Item> GetItemByIDEventHandler(int ID);
     public delegate Task<List<Item>> GetAllItemsEventHandler();
     public delegate Task<int> GetBondsEventHandler(char Type);
     public delegate Task<bool> PayEventHandler(int amount, ulong ID);
@@ -59,6 +60,21 @@ namespace Dronee_Chan_2.Discord_Bot.Events
             {
                 // Raise the event
                 return GetItemEventRaised(Name.TrimEnd(' '));
+            }
+            return null;
+        }
+
+        // Define the event
+        public static event GetItemByIDEventHandler GetItemByIDEventRaised;
+
+        // Method to raise the event
+        public static Task<Item> GetItemByID(int ID)
+        {
+            // Check if there are any subscribers to the event
+            if (GetItemByIDEventRaised != null)
+            {
+                // Raise the event
+                return GetItemByIDEventRaised(ID);
             }
             return null;
         }
