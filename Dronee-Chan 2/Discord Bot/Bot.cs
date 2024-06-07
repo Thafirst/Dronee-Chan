@@ -34,6 +34,8 @@ namespace Dronee_Chan_2.Discord_Bot
         ItemController IC;
         BondsController BC;
         MessageController MC;
+        IDController IDC;
+        RankController RC;
 
 
         public Bot()
@@ -119,6 +121,8 @@ namespace Dronee_Chan_2.Discord_Bot
             IC = new ItemController(await Client.GetGuildAsync(1006058186136096798));
             BC = new BondsController(await Client.GetGuildAsync(1006058186136096798));
             MC = new MessageController(await Client.GetGuildAsync(1006058186136096798));
+            IDC = new IDController(await Client.GetGuildAsync(1006058186136096798));
+            RC = new RankController(await Client.GetGuildAsync(1006058186136096798));
 
             await Task.Delay(-1);
         }

@@ -19,6 +19,8 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
         {
             await ctx.DeferAsync();
 
+
+
             await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent("Pong"));
         }
     }

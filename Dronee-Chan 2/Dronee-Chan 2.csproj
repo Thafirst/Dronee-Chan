@@ -18,6 +18,7 @@
     <PackageReference Include="DSharpPlus.Interactivity" Version="5.0.0-nightly-02204" />
     <PackageReference Include="DSharpPlus.SlashCommands" Version="5.0.0-nightly-02204" />
     <PackageReference Include="Firebase.Database" Version="1.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="9.0.0-preview.4.24267.1" />
   </ItemGroup>
 
 </Project>

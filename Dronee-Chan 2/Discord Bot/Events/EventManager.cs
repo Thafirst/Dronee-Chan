@@ -17,6 +17,8 @@ namespace Dronee_Chan_2.Discord_Bot.Events
     public delegate Task<int> GetBondsEventHandler(char Type);
     public delegate Task<bool> PayEventHandler(int amount, ulong ID);
     public delegate void MessageEventHandler(string message);
+    public delegate Task<string> GenerateIDCEventHandler(User user);
+    public delegate Task<double> CalculateRankEventHandler(User user);
 
     internal class EventManager
     {
@@ -136,6 +138,36 @@ namespace Dronee_Chan_2.Discord_Bot.Events
                 // Raise the event
                 MessageEventRaised(message);
             }
+        }
+
+        // Define the event
+        public static event GenerateIDCEventHandler GenerateIDCEventRaised;
+
+        // Method to raise the event
+        public static Task<string> GenerateIDC(User user)
+        {
+            // Check if there are any subscribers to the event
+            if (GenerateIDCEventRaised != null)
+            {
+                // Raise the event
+                return GenerateIDCEventRaised(user);
+            }
+            return null;
+        }
+
+        // Define the event
+        public static event CalculateRankEventHandler CalculateRankEventRaised;
+
+        // Method to raise the event
+        public static Task<double> CalculateRank(User user)
+        {
+            // Check if there are any subscribers to the event
+            if (CalculateRankEventRaised != null)
+            {
+                // Raise the event
+                return CalculateRankEventRaised(user);
+            }
+            return null;
         }
     }
 }

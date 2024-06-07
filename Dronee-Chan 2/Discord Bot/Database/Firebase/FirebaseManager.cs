@@ -15,7 +15,6 @@ namespace Dronee_Chan_2.Discord_Bot.Database.Firebase
 
         public FirebaseManager(string firebaseUrl, string firebaseSecret)
         {
-            Console.WriteLine(firebaseUrl + " - " + firebaseSecret);
 
             _firebaseClient = new FirebaseClient(firebaseUrl, new FirebaseOptions
             {
