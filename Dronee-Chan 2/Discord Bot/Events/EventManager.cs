@@ -26,7 +26,7 @@ namespace Dronee_Chan_2.Discord_Bot.Events
         public static event SaveUserEventHandler SaveUserEventRaised;
 
         // Method to raise the event
-        public static void SaveUserEvent(User user)
+        public static void SaveUser(User user)
         {
             // Check if there are any subscribers to the event
             if (SaveUserEventRaised != null)
@@ -40,7 +40,7 @@ namespace Dronee_Chan_2.Discord_Bot.Events
         public static event LoadUserEventHandler LoadUserEventRaised;
 
         // Method to raise the event
-        public static Task<User> LoadUserEvent(ulong id)
+        public static Task<User> LoadUser(ulong id)
         {
             // Check if there are any subscribers to the event
             if (LoadUserEventRaised != null)

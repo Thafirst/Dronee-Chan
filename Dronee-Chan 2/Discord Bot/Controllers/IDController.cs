@@ -50,6 +50,9 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
 
         private async Task getAvatar(DiscordMember user)
         {
+            if (File.Exists($"C:\\Images\\{MakeValidFileName(getUsername(user).Trim())}.png"))
+                return;
+
             using (WebClient webClient = new WebClient())
             {
                 string URI = user.AvatarUrl;
@@ -62,8 +65,10 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
                 //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
                 await Task.Run(() => webClient.DownloadFile(new Uri(URI), FilePath));
-                //webClient.Dispose();
+
+                webClient.Dispose();
             }
+
         }
 
         private string getUsername(DiscordMember user)
@@ -106,7 +111,6 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
             img = mergeImages(img, Image.FromFile(imageList.XPBar), 0, 0);
             if (user.IsVIP)
                 img = mergeImages(img, Image.FromFile(imageList.VIP), 0, 0);
-
 
             //inventory
             Point p = new Point(715, 465);

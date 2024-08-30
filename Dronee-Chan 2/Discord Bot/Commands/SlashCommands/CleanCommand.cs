@@ -1,7 +1,7 @@
 ﻿using Dronee_Chan_2.Discord_Bot.Attributes;
 using Dronee_Chan_2.Discord_Bot.Events;
 using Dronee_Chan_2.Discord_Bot.Objects.UserObjects;
-using DSharpPlus.CommandsNext.Attributes;
+using DSharpPlus.Commands;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using System;
@@ -14,14 +14,14 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
 {
     internal class CleanCommand : ApplicationCommandModule
     {
-        [SlashCommand("Clean", "Cleans your ID card if you have an ID Card Cleaner.")]
+        [Command("Clean")]
         [RequireRolesSlash(RoleCheckMode.Any, "Member", "Staff", "Staff+")]
         [RequireSpecificGuildSlash(GuildCheckMode.Any, 734214744818581575, 1006058186136096798)]
-        public async Task Clean(InteractionContext ctx)
+        public async Task Clean(CommandContext ctx)
         {
-            await ctx.DeferAsync();
+            await ctx.DeferResponseAsync();
 
-            User user = await EventManager.LoadUserEvent(ctx.User.Id);
+            User user = await EventManager.LoadUser(ctx.User.Id);
 
             if (!user.Inventory.Contains("5"))
             {
@@ -32,7 +32,7 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
             user.Inventory.Remove("5");
             user.Infected = false;
 
-            EventManager.SaveUserEvent(user);
+            EventManager.SaveUser(user);
 
 
             await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent("You have been cured of your infection!"));

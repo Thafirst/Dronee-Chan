@@ -22,7 +22,7 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
 
         private Task<double> EventManager_CalculateRankEventRaised(User user)
         {
-            var ranks = discordGuild.GetChannel(1006064392338669568).GetMessageAsync(1006067090559611031).Result.Content.Split('\n');
+            var ranks = discordGuild.GetChannelAsync(1006064392338669568).Result.GetMessageAsync(1006067090559611031).Result.Content.Split('\n');
 
             int accPoints = 0;
             int accRanks = 0;

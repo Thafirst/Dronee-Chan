@@ -28,7 +28,7 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
 
             string message = "";
 
-            User user = await EventManager.LoadUserEvent(ID);
+            User user = await EventManager.LoadUser(ID);
 
 
             if (amount == 0)
@@ -89,7 +89,7 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
 
             user.LastSeen = DateTime.Now;
 
-            EventManager.SaveUserEvent(user);
+            EventManager.SaveUser(user);
 
             EventManager.Message(message);
 
@@ -104,7 +104,7 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
         private async Task<Dictionary<char, int>> GetBondValues()
         {
 
-            var messages = DiscordGuild.GetChannel(1242267229639282738).GetMessagesAsync(limit: 500);
+            var messages = DiscordGuild.GetChannelAsync(1242267229639282738).Result.GetMessagesAsync(limit: 500);
 
             var bonds = new Dictionary<char, int>();
             await foreach (var message in messages)

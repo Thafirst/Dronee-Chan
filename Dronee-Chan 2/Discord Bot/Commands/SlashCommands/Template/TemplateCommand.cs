@@ -1,5 +1,4 @@
 ﻿using Dronee_Chan_2.Discord_Bot.Attributes;
-using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using System;

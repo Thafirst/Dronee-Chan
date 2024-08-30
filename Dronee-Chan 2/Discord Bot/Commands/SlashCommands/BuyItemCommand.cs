@@ -1,7 +1,7 @@
 ﻿using Dronee_Chan_2.Discord_Bot.Attributes;
 using Dronee_Chan_2.Discord_Bot.Events;
 using Dronee_Chan_2.Discord_Bot.Objects.UserObjects;
-using DSharpPlus.CommandsNext.Attributes;
+using DSharpPlus.Commands;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using System;
@@ -14,12 +14,12 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
 {
     internal class BuyItemCommand : ApplicationCommandModule
     {
-        [SlashCommand("BuyItem", "Buys the item with the supplied Name")]
+        [Command("BuyItem")]
         [RequireRolesSlash(RoleCheckMode.Any, "Member", "Staff", "Staff+")]
         [RequireSpecificGuildSlash(GuildCheckMode.Any, 734214744818581575, 1006058186136096798)]
-        public async Task BuyItem(InteractionContext ctx, [Option("Name", "The Name of the item you wish to buy", true)]string item, [Option("Amount", "The amount of the item you want", false)]long LAmount = 1)
+        public async Task BuyItem(CommandContext ctx, [Option("Name", "The Name of the item you wish to buy", true)]string item, [Option("Amount", "The amount of the item you want", false)]long LAmount = 1)
         {
-            await ctx.DeferAsync();
+            await ctx.DeferResponseAsync();
 
             int amount = (int)LAmount;
 
@@ -33,7 +33,7 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
                 return;
             }
 
-            User user = await EventManager.LoadUserEvent(id);
+            User user = await EventManager.LoadUser(id);
 
             if(user.Currency < Item.BuyPrice * amount)
             {
@@ -50,7 +50,7 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
             user.AddToInventory(Item.ID.ToString());
             user.Currency -= amount * Item.BuyPrice;
 
-            EventManager.SaveUserEvent(user);
+            EventManager.SaveUser(user);
 
             await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent(amount + "x " + Item.Name + " has been added to your inventory."));
         }

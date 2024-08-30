@@ -1,7 +1,7 @@
 ﻿using Dronee_Chan_2.Discord_Bot.Attributes;
 using Dronee_Chan_2.Discord_Bot.Events;
 using Dronee_Chan_2.Discord_Bot.Objects.UserObjects;
-using DSharpPlus.CommandsNext.Attributes;
+using DSharpPlus.Commands;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using System;
@@ -14,12 +14,13 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
 {
     internal class ActivityCommand : ApplicationCommandModule
     {
-        [SlashCommand("Activity", "Checks for member activity and prints anyone breaking the activity rule")]
+        [Command("Activity")]
+        [RegisterToGuilds(1006058186136096798, 734214744818581575)]
         [RequireRolesSlash(RoleCheckMode.Any, "Staff+")]
         [RequireSpecificGuildSlash(GuildCheckMode.Any, 734214744818581575, 1006058186136096798)]
-        public async Task Activity(InteractionContext ctx)
+        public async Task Activity(CommandContext ctx)
         {
-            await ctx.DeferAsync();
+            await ctx.DeferResponseAsync();
 
             DateTime now = DateTime.Now;
             TimeSpan span;
@@ -31,7 +32,7 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
                 if (member.Roles.Any(r => r.Name == "Inactive") || member.Roles.Any(r => r.Name == "Denied") || member.IsBot)
                     continue;
 
-                User user = await EventManager.LoadUserEvent(member.Id);
+                User user = await EventManager.LoadUser(member.Id);
                 time = baseTime;
                 if (user.LastSeen != new DateTime(1977, 1, 1))
                 {

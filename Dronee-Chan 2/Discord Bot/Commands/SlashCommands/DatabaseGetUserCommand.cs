@@ -1,7 +1,7 @@
 ﻿using Dronee_Chan_2.Discord_Bot.Attributes;
 using Dronee_Chan_2.Discord_Bot.Events;
 using Dronee_Chan_2.Discord_Bot.Objects.UserObjects;
-using DSharpPlus.CommandsNext.Attributes;
+using DSharpPlus.Commands;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using System;
@@ -14,12 +14,12 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
 {
     internal class DatabaseGetUserCommand : ApplicationCommandModule
     {
-        [SlashCommand("databasegetuser", "Fetches the info of a user from the database and prints it")]
+        [Command("databasegetuser")]
         [RequireRolesSlash(RoleCheckMode.Any, "Staff+")]
         [RequireSpecificGuildSlash(GuildCheckMode.Any, 734214744818581575, 1006058186136096798)]
-        public async Task Databasegetuser(InteractionContext ctx, [Option("UUID", "The Discord UUID of the person", true)] string id)
+        public async Task Databasegetuser(CommandContext ctx, [Option("UUID", "The Discord UUID of the person", true)] string id)
         {
-            await ctx.DeferAsync();
+            await ctx.DeferResponseAsync();
             ulong UUID;
             try
             {
@@ -30,7 +30,7 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
                 return;
             }
 
-            User user = await EventManager.LoadUserEvent(UUID);
+            User user = await EventManager.LoadUser(UUID);
 
             await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent(user.ToJson()));
         }

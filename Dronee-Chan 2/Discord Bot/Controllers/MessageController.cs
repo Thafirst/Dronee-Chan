@@ -11,7 +11,7 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
     internal class MessageController
     {
 
-        ulong MessageChannel = 1242799365672931431;
+        ulong MessageChannel = 1242799365672931431; // test-message-channel
 
         public DiscordGuild DiscordGuild { get; private set; }
 
@@ -24,7 +24,7 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
 
         private void EventManager_MessageEventRaised(string message)
         {
-            DiscordGuild.GetChannel(MessageChannel).SendMessageAsync(message);
+            DiscordGuild.GetChannelAsync(MessageChannel).Result.SendMessageAsync(message);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Dronee_Chan_2.Discord_Bot.Attributes;
 using Dronee_Chan_2.Discord_Bot.Events;
 using Dronee_Chan_2.Discord_Bot.Objects.UserObjects;
-using DSharpPlus.CommandsNext.Attributes;
+using DSharpPlus.Commands;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using System;
@@ -15,19 +15,19 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
 {
     internal class GiveItemCommand : ApplicationCommandModule
     {
-        [SlashCommand("GiveItem", "Gives the item with the ID to the user with the UUID.")]
+        [Command("GiveItem")]
         [RequireRolesSlash(RoleCheckMode.Any, "Staff+")]
         [RequireSpecificGuildSlash(GuildCheckMode.Any, 734214744818581575, 1006058186136096798)]
-        public async Task GiveItem(InteractionContext ctx, [Option("ID","The Discord UUID of the person to give the item to.")] string SID,
+        public async Task GiveItem(CommandContext ctx, [Option("ID","The Discord UUID of the person to give the item to.")] string SID,
                                                            [Option("Item","The ID of the item to give.")] long LID)
         {
-            await ctx.DeferAsync();
+            await ctx.DeferResponseAsync();
 
             ulong ID = ulong.Parse(SID);
 
             int ItemID = (int)LID;
 
-            User user = await EventManager.LoadUserEvent(ID);
+            User user = await EventManager.LoadUser(ID);
 
             if (user == null)
             {
@@ -51,7 +51,7 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
 
             user.Inventory.Add(item.ID.ToString());
 
-            EventManager.SaveUserEvent(user);
+            EventManager.SaveUser(user);
 
             await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent(ctx.Guild.GetMemberAsync(user.DiscordUUID).Result.Username + " has been given 1x " + item.Name ));
         }

@@ -19,7 +19,8 @@ namespace Dronee_Chan_2.Discord_Bot.Objects.UserObjects
         public bool IsVIP { get; set; }          // VIP status
         public int StreakCounter { get; set; }   // Streak counter
         public List<string> Achievements { get; set; }  // User's achievements
-        public List<string> OnboardingQuestChoices { get; set; }  // Onboarding quest choices
+        public Dictionary<string, string> OnboardingQuestChoices { get; set; }  // Onboarding quest choices
+        public int OnboardingQuestMistakes { get; set; }  // Onboarding quest choices
         public bool Infected { get; set; }  // If the user if infected
 
 
@@ -39,6 +40,7 @@ namespace Dronee_Chan_2.Discord_Bot.Objects.UserObjects
             StreakCounter = deserializedUser.StreakCounter;
             Achievements = deserializedUser.Achievements;
             OnboardingQuestChoices = deserializedUser.OnboardingQuestChoices;
+            OnboardingQuestMistakes = deserializedUser.OnboardingQuestMistakes;
             Infected = deserializedUser.Infected;
         }
         [JsonConstructor]
@@ -53,7 +55,8 @@ namespace Dronee_Chan_2.Discord_Bot.Objects.UserObjects
             IsVIP = false;
             StreakCounter = 0;
             Achievements = new List<string>();
-            OnboardingQuestChoices = new List<string>();
+            OnboardingQuestChoices = new Dictionary<string, string>();
+            OnboardingQuestMistakes = 0;
             Infected = false;
         }
         public string ToJson()
@@ -74,11 +77,6 @@ namespace Dronee_Chan_2.Discord_Bot.Objects.UserObjects
         public void AddAchievement(string achievement)
         {
             Achievements.Add(achievement);
-        }
-
-        public void AddOnboardingQuestChoice(string choice)
-        {
-            OnboardingQuestChoices.Add(choice);
         }
 
 

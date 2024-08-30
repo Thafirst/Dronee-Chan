@@ -1,7 +1,7 @@
 ﻿using Dronee_Chan_2.Discord_Bot.Attributes;
 using Dronee_Chan_2.Discord_Bot.Events;
 using Dronee_Chan_2.Discord_Bot.Objects.UserObjects;
-using DSharpPlus.CommandsNext.Attributes;
+using DSharpPlus.Commands;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using System;
@@ -14,12 +14,12 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
 {
     internal class CatalogCommand : ApplicationCommandModule
     {
-        [SlashCommand("Catalog", "Shows the Raven Shop catalog")]
+        [Command("Catalog")]
         [RequireRolesSlash(RoleCheckMode.Any, "Member", "Staff", "Staff+")]
         [RequireSpecificGuildSlash(GuildCheckMode.Any, 734214744818581575, 1006058186136096798)]
-        public async Task Catalog(InteractionContext ctx)
+        public async Task Catalog(CommandContext ctx)
         {
-            await ctx.DeferAsync();
+            await ctx.DeferResponseAsync();
 
             List<Item> items = await EventManager.GetAllItems();
 

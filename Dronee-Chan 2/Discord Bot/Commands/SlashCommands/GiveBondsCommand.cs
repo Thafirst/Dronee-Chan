@@ -1,6 +1,6 @@
 ﻿using Dronee_Chan_2.Discord_Bot.Attributes;
 using Dronee_Chan_2.Discord_Bot.Events;
-using DSharpPlus.CommandsNext.Attributes;
+using DSharpPlus.Commands;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using System;
@@ -13,14 +13,14 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
 {
     internal class GiveBondsCommand : ApplicationCommandModule
     {
-        [SlashCommand("GiveBonds", "Replies with Pong")]
+        [Command("GiveBonds")]
         [RequireRolesSlash(RoleCheckMode.Any, "Staff+")]
         [RequireSpecificGuildSlash(GuildCheckMode.Any, 734214744818581575, 1006058186136096798)]
-        public async Task GiveBonds(InteractionContext ctx, [Option("Type","Type of bonds to give, C or T.", false)]string Type,
+        public async Task GiveBonds(CommandContext ctx, [Option("Type","Type of bonds to give, C or T.", false)]string Type,
                                                             [Option("Amount","The amount of bonds to give.")] long LAmount,
                                                             [Option("UUID", "The Discord UUID of the person to recieve the bonds.")] string SID)
         {
-            await ctx.DeferAsync(true);
+            await ctx.DeferResponseAsync();
 
             var value = await EventManager.GetBonds(char.Parse(Type));
 

@@ -1,7 +1,8 @@
 ﻿using Dronee_Chan_2.Discord_Bot.Attributes;
 using Dronee_Chan_2.Discord_Bot.Events;
 using Dronee_Chan_2.Discord_Bot.Objects.UserObjects;
-using DSharpPlus.CommandsNext.Attributes;
+using DSharpPlus;
+using DSharpPlus.Commands;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using System;
@@ -15,24 +16,51 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
 {
     internal class TestCommand : ApplicationCommandModule
     {
-        [SlashCommand("Test", "Replies with Pong")]
+        [Command("Test")]
         [RequireRolesSlash(RoleCheckMode.Any, "Staff+")]
         [RequireSpecificGuildSlash(GuildCheckMode.Any, 734214744818581575, 1006058186136096798)]
-        public async Task Test(InteractionContext ctx, [Option("Number1", "number")]long number, [Option("Number2", "ImagesPerFile")]long ImagesPerFile)
+        public async Task Test(CommandContext ctx, [Option("String", "string")]string str = "", [Option("Number2", "ImagesPerFile")]long ImagesPerFile = 0)
         {
-            await ctx.DeferAsync();
+            await ctx.DeferResponseAsync();
 
-            User user = await EventManager.LoadUserEvent(ctx.User.Id);
+            //DiscordFollowupMessageBuilder builder = new DiscordFollowupMessageBuilder()
+            //    .WithContent("test with button")
+            //    .AddComponents(new DiscordButtonComponent(DiscordButtonStyle.Primary, "Thisisthevalueofthetestbutton", "testt"));
 
-            double rank = await EventManager.CalculateRank(user);
+            //Console.WriteLine(builder);
 
-            await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent("rank: " + rank));
+            //await ctx.FollowUpAsync(builder);
 
+            StartOnboardingQuestEvent.StartOnboardingQuest(ulong.Parse(str));
+
+
+            //PostContractEvent.PostContract("RCW Olympus Open Session", 1722095378.ToString());
+
+
+
+
+            //DiscordForumChannel channel = (DiscordForumChannel)ctx.Guild.GetChannel(1251217697379979375); //TODO: Fix to Contracts channel
+
+            //foreach (var message in channel.Threads.ToList())
+            //{
+            //    if ((DateTime.Now - message.CreationTimestamp).TotalDays >= 5)
+            //    {
+            //        await message.DeleteAsync();
+            //    }
+            //}
+
+            //User user = await EventManager.LoadUser(ctx.User.Id);
+
+            //double rank = await EventManager.CalculateRank(user);
 
             //int fileIndex = ((int)number - 1) / (int)ImagesPerFile;
             //int imageIndexInFile = ((int)number - 1) % (int)ImagesPerFile + 1;
 
             //await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent("fileIndex: " + fileIndex + "\nimageIndexInFile: " + imageIndexInFile));
+
+
+
+            await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent("Done"));
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Dronee_Chan_2.Discord_Bot.Attributes;
 using Dronee_Chan_2.Discord_Bot.Events;
 using Dronee_Chan_2.Discord_Bot.Objects.UserObjects;
-using DSharpPlus.CommandsNext.Attributes;
+using DSharpPlus.Commands;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using System;
@@ -14,12 +14,12 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
 {
     internal class DonateCommand : ApplicationCommandModule
     {
-        [SlashCommand("Donate", "Donates R$ to the PMC in order to increase your rank.")]
+        [Command("Donate")]
         [RequireRolesSlash(RoleCheckMode.Any, "Member", "Staff", "Staff+")]
         [RequireSpecificGuildSlash(GuildCheckMode.Any, 734214744818581575, 1006058186136096798)]
-        public async Task Donate(InteractionContext ctx, [Option("Amount", "Amount that you wish to donate to the PMC", true)] string SAmount)
+        public async Task Donate(CommandContext ctx, [Option("Amount", "Amount that you wish to donate to the PMC", true)] string SAmount)
         {
-            await ctx.DeferAsync();
+            await ctx.DeferResponseAsync();
 
             int amount = 0;
 
@@ -42,7 +42,7 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
                 }
             }
 
-            User user = await EventManager.LoadUserEvent(ctx.User.Id);
+            User user = await EventManager.LoadUser(ctx.User.Id);
 
             if (user.Currency <= 0)
             {
@@ -63,7 +63,7 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
             user.DonationAmount += amount;
             user.Currency -= amount;
 
-            EventManager.SaveUserEvent(user);
+            EventManager.SaveUser(user);
 
 
 

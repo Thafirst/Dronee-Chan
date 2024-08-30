@@ -25,7 +25,7 @@ namespace Dronee_Chan_2.Discord_Bot.Database
         private async Task<User> HandleLoadUserEvent(ulong id)
         {
 
-            var user =  await LoadUser(id);
+            var user = await LoadUser(id);
 
             return user;
         }
@@ -46,7 +46,7 @@ namespace Dronee_Chan_2.Discord_Bot.Database
             if (result == null)
             {
                 User user = new User(UUID);
-                EventManager.SaveUserEvent(user);
+                EventManager.SaveUser(user);
                 return Task.FromResult(user);
             }
             return Task.FromResult(result);

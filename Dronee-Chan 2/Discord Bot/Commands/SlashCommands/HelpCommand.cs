@@ -1,5 +1,5 @@
 ﻿using Dronee_Chan_2.Discord_Bot.Attributes;
-using DSharpPlus.CommandsNext.Attributes;
+using DSharpPlus.Commands;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using System;
@@ -12,14 +12,14 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
 {
     internal class HelpCommand : ApplicationCommandModule
     {
-        [SlashCommand("help", "Posts the full list of commands available")]
+        [Command("help")]
         [RequireRolesSlash(RoleCheckMode.Any, "Member", "Staff", "Staff+")]
         [RequireSpecificGuildSlash(GuildCheckMode.Any, 734214744818581575, 1006058186136096798)]
-        public async Task Help(InteractionContext ctx)
+        public async Task Help(CommandContext ctx)
         {
             try
             {
-                await ctx.DeferAsync();
+                await ctx.DeferResponseAsync();
 
                 await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent(MemberHelp()));
                 Console.WriteLine(ctx.Member.Roles);
