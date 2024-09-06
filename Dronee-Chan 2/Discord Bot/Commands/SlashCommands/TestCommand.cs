@@ -1,4 +1,5 @@
 ﻿using Dronee_Chan_2.Discord_Bot.Attributes;
+using Dronee_Chan_2.Discord_Bot.Enums;
 using Dronee_Chan_2.Discord_Bot.Events;
 using Dronee_Chan_2.Discord_Bot.Objects.UserObjects;
 using DSharpPlus;
@@ -31,11 +32,22 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
 
             //await ctx.FollowUpAsync(builder);
 
-            StartOnboardingQuestEvent.StartOnboardingQuest(ulong.Parse(str));
+            //StartOnboardingQuestEvent.StartOnboardingQuest(ulong.Parse(str));
 
 
             //PostContractEvent.PostContract("RCW Olympus Open Session", 1722095378.ToString());
 
+
+
+            string message = "Event Controls";
+
+            var NewEvent = new DiscordButtonComponent(DiscordButtonStyle.Primary, EventManagementEnums.New.ToString(), "New Event");
+
+            var builder = new DiscordMessageBuilder()
+                .WithContent(message)
+                .AddComponents(NewEvent);
+
+            await builder.SendAsync(ctx.Channel);
 
 
 
@@ -60,7 +72,7 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
 
 
 
-            await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent("Done"));
+            //await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent("Done"));
         }
     }
 }

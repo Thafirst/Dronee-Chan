@@ -47,6 +47,7 @@ namespace Dronee_Chan_2.Discord_Bot
         TimerController TC;
         EventController EC;
         OnboardingQuestController OQC;
+        WeeklyEventManagerController WEMC;
 
 
         public Bot()
@@ -185,6 +186,10 @@ namespace Dronee_Chan_2.Discord_Bot
         private async Task Client_GuildMemberJoined(DiscordClient client, GuildMemberAddedEventArgs args)
         {
 
+            if (args.Guild.Id != 734214744818581575 && args.Guild.Id != 1006058186136096798)
+                return;
+
+            MemberJoinedEvent.MemberJoined(args);
         }
 
         private Task Client_InteractionCreated(DiscordClient sender, InteractionCreatedEventArgs args)
@@ -233,6 +238,7 @@ namespace Dronee_Chan_2.Discord_Bot
             TC = new TimerController(await Client.GetGuildAsync(1006058186136096798)); //TODO: update to Ravenspear ID
             EC = new EventController(await Client.GetGuildAsync(1006058186136096798));
             OQC = new OnboardingQuestController(await Client.GetGuildAsync(1006058186136096798), await Client.GetGuildAsync(1006058186136096798)); //TODO: update second guild to RVN );
+            WEMC = new WeeklyEventManagerController(await Client.GetGuildAsync(1006058186136096798), await Client.GetGuildAsync(1006058186136096798)); //TODO: update First guild to RVN );
 
             await Task.Delay(-1);
         }

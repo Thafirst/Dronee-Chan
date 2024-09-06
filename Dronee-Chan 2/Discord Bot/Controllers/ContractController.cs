@@ -45,7 +45,7 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
 
         private async void AutoEventHandling()
         {
-            var messages = DC_Lair.GetChannelAsync(1251241109951217794).Result.GetMessagesAsync();
+            var messages = RVN.GetChannelAsync(1251241109951217794).Result.GetMessagesAsync(); // TODO: Change to Event Management channel in RVNSPR
 
             await foreach (var message in messages)
             {

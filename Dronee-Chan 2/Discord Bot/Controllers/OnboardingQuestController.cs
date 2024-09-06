@@ -26,6 +26,14 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
 
             StartOnboardingQuestEvent.StartOnboardingQuestEventRaised += StartOnboardingQuestEvent_StartOnboardingQuestEventRaised;
             ButtonPressedEvent.ButtonPressedEventRaised += ButtonPressedEvent_ButtonPressedEventRaised;
+            MemberJoinedEvent.MemberJoinedEventRaised += MemberJoinedEvent_MemberJoinedEventRaised;
+        }
+
+        private async void MemberJoinedEvent_MemberJoinedEventRaised(GuildMemberAddedEventArgs args)
+        {
+            User user = await EventManager.LoadUser(args.Member.Id);
+            if (user.OnboardingQuestMistakes >= 2)
+                DenyUser(user);
         }
 
         private void ButtonPressedEvent_ButtonPressedEventRaised(InteractionCreatedEventArgs args)
@@ -169,9 +177,16 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
             await discordUser.GrantRoleAsync(memberRole);
         }
 
+        private async void DenyUser(User user)
+        {
+            DenyUser(user, null);
+        }
+
         private async void DenyUser(User user, DiscordChannel discordChannel)
         {
-            await discordChannel.DeleteAsync();
+            if(discordChannel != null)
+                await discordChannel.DeleteAsync();
+
             DiscordMember discordUser = await RVN.GetMemberAsync(user.DiscordUUID);
             DiscordRole questingRole = await RVN.GetRoleAsync(1230931522291241040); //TODO: Change to Questing role
             DiscordRole denyRole = await RVN.GetRoleAsync(1277522729540653087); //TODO: Change to Questing role
