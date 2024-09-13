@@ -10,7 +10,6 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
 {
     internal class IDController
     {
-        Image BG;
 
 
         DiscordGuild DiscordGuild { get; set; }

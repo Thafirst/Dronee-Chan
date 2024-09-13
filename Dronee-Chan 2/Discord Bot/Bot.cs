@@ -48,6 +48,7 @@ namespace Dronee_Chan_2.Discord_Bot
         EventController EC;
         OnboardingQuestController OQC;
         WeeklyEventManagerController WEMC;
+        UserActionController UAC;
 
 
         public Bot()
@@ -90,6 +91,9 @@ namespace Dronee_Chan_2.Discord_Bot
                 .HandleMessageCreated(Client_MessageCreated)
                 .HandleComponentInteractionCreated(Client_InteractionCreated)
                 .HandleGuildMemberAdded(Client_GuildMemberJoined)
+                .HandleMessageUpdated(MessageEdited)
+                .HandleMessageDeleted(MessageDeleted)
+                .HandleGuildMemberRemoved(MemberLeft)
             );
 
 
@@ -136,51 +140,21 @@ namespace Dronee_Chan_2.Discord_Bot
 
 
             Client = CBuilder.Build();
+        }
 
-            //Client.UseInteractivity(InteractivityConfiguration);
+        private async Task MemberLeft(DiscordClient client, GuildMemberRemovedEventArgs args)
+        {
+            MemberLeftEvent.MemberLeft(args);
+        }
 
-            //Client.SessionCreated += Client_SessionCreated;
+        private async Task MessageDeleted(DiscordClient client, MessageDeletedEventArgs args)
+        {
+            MessageDeletedEvent.MessageDeleted(args);
+        }
 
-            //Client.ModalSubmitted += Client_ModalSubmitted;
-            
-
-            //Commands.RegisterCommands<Commands.PrefixCommands.GeneralCommands>();
-
-            ////Client.MessageCreated += Client_MessageCreated;
-            ////Client.InteractionCreated += Client_InteractionCreated;
-
-            //SlashCommandsConfig.RegisterCommands<ActivityCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<BuyItemCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<CatalogCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<CleanCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<DatabaseGetUserCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<DonateCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<FixBondsMessageCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<EditMessageCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<GiveBondsCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<GiveItemCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<HelpCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<IdCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<InfectCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<IsXModuleGoodCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<LastSeenCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<ManualEventCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<PingCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<PostCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<PostContractCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<PromoteCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<RanksCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<RemoveItemCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<SetCurrencyCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<SetDonateCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<SetFlightsCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<SetLastSeenCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<SetStreakCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<TestCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<UpdateMessageCommand>(1006058186136096798);
-            //SlashCommandsConfig.RegisterCommands<VipCommand>(1006058186136096798);
-
-
+        private async Task MessageEdited(DiscordClient client, MessageUpdatedEventArgs args)
+        {
+            MessageEditedEvent.MessageEdited(args);
         }
 
         private async Task Client_GuildMemberJoined(DiscordClient client, GuildMemberAddedEventArgs args)
@@ -239,6 +213,7 @@ namespace Dronee_Chan_2.Discord_Bot
             EC = new EventController(await Client.GetGuildAsync(1006058186136096798));
             OQC = new OnboardingQuestController(await Client.GetGuildAsync(1006058186136096798), await Client.GetGuildAsync(1006058186136096798)); //TODO: update second guild to RVN );
             WEMC = new WeeklyEventManagerController(await Client.GetGuildAsync(1006058186136096798), await Client.GetGuildAsync(1006058186136096798)); //TODO: update First guild to RVN );
+            UAC = new UserActionController(await Client.GetGuildAsync(1006058186136096798)); //TODO: change to RVN
 
             await Task.Delay(-1);
         }

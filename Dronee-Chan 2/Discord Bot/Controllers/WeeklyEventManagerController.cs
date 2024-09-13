@@ -58,7 +58,6 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
                 case EventManagementEnums.Delete:
                     DeleteEvent(args.Interaction.Message);
                     break;
-
             }
         }
 
@@ -109,7 +108,6 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
         {
             await discordMessage.DeleteAsync();
         }
-
 
         private void AddToEvent(string key, string value)
         {

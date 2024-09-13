@@ -32,7 +32,6 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
         {
             string content = message.Content;
 
-            RegexOptions regexOptions = RegexOptions.Singleline;
             string timestamp = Regex.Split(content, @"\*\*START TIME\/DURATION:\*\*?.*(<t:?.*>)")[1].Split(':')[1];
             string name = Regex.Split(content, @"\*\*NAME:\*\*( ?.*)")[1];
             string description = "For more information on this event, check the #contracts channel." + "\n" + message.JumpLink;

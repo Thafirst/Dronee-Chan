@@ -11,7 +11,7 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
     internal class MessageController
     {
 
-        ulong MessageChannel = 1242799365672931431; // test-message-channel
+        ulong MessageChannel = 1242799365672931431; //TODO: Change to DC-Lair Channel - test-message-channel
 
         public DiscordGuild DiscordGuild { get; private set; }
 
