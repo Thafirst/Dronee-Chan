@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /Dronee-Chan 2/Discord Bot/Config.json
 /Dronee-Chan 2/bin/Debug/net8.0/Config.json
+/Dronee-Chan 2/Discord Bot/Controllers/PRatingController.cs
