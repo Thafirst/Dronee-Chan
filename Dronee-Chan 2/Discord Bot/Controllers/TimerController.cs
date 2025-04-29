@@ -1,15 +1,17 @@
 ﻿using Dronee_Chan_2.Discord_Bot.Events;
 using DSharpPlus.Entities;
+using DSharpPlus.EventArgs;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Text.RegularExpressions;
 using System.Timers;
+using Timer = System.Threading.Timer;
 
 namespace Dronee_Chan_2.Discord_Bot.Controllers
 {
     internal class TimerController
     {
-        System.Timers.Timer DailyTimer = new System.Timers.Timer();
+        Timer DailyTimer;
         List<System.Timers.Timer> EventTimers = new List<System.Timers.Timer>();
         DiscordGuild RVN;
 
@@ -17,26 +19,44 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
         {
             RVN = rVN;
 
+            Console.WriteLine(DateTime.Today);
+
             SetupDailyTimer();
             SetupEventTimers();
+            GuildEventCreatedEvent.GuildEventCreatedEventRaised += GuildEventCreatedEvent_GuildEventCreatedEventRaised;
+            MessageCreatedEvent.MessageCreatedEventRaised += MessageCreatedEvent_MessageCreatedEventRaised;
+        }
+
+        private void GuildEventCreatedEvent_GuildEventCreatedEventRaised(DSharpPlus.EventArgs.ScheduledGuildEventCreatedEventArgs args)
+        {
+            SetupTimer(args.Event);
+        }
+
+        private void MessageCreatedEvent_MessageCreatedEventRaised(MessageCreatedEventArgs args)
+        {
+            if (args.Author.Id != 964940458910416997 && args.Author.Id != 898056364688039946 || !args.Message.Content.Contains("**CONTRACT AVAILABLE**"))
+                return;
+            if(args.Channel is not DiscordThreadChannel)
+                return;
+
+            SetupPreEventTimer(args.Message.Channel as DiscordThreadChannel);
+
         }
 
         private void SetupDailyTimer()
         {
-            DateTime tomorrow = new DateTime(DateTime.Now.AddDays(1).Year, DateTime.Now.AddDays(1).Month, DateTime.Now.AddDays(1).Day, 12, 0, 0);
+            DateTime tomorrow = DateTime.Today.AddDays(1).AddHours(12);
             TimeSpan ts = tomorrow - DateTime.Now;
+            //TimeSpan temp = TimeSpan.FromMinutes(1);
 
-            DailyTimer.Interval = (ts.TotalMilliseconds);
-            DailyTimer.AutoReset = false;
-            DailyTimer.Elapsed += (sender, e) => DailyTimerCallback(sender, e);
-            DailyTimer.Start();
+            DailyTimer = new Timer(DailyTimerCallback, null, (int)ts.TotalMilliseconds, (int)TimeSpan.FromDays(1).TotalMilliseconds);
         }
 
-        private void DailyTimerCallback(object sender, ElapsedEventArgs e)
+        private void DailyTimerCallback(object sender)
         {
-            DailyCheckEvent.DailyCheck();
+            //Console.WriteLine("Daily Call");
 
-            SetupDailyTimer();
+            DailyCheckEvent.DailyCheck();
         }
 
         private void SetupEventTimers()
@@ -47,7 +67,7 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
         private void ContractTimers()
         {
 
-            DiscordForumChannel channel = (DiscordForumChannel)RVN.GetChannelAsync(1251217697379979375).Result; //TODO: Fix to Contracts channel
+            DiscordForumChannel channel = (DiscordForumChannel)RVN.GetChannelAsync(1019938900036305029).Result; //TODO: Fix to Contracts channel
 
             foreach (var message in channel.Threads.ToList())
             {
@@ -68,7 +88,7 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
 
         private void PreEventTimer(DateTime DT, DiscordThreadChannel Channel)
         {
-            if (!IsFutureDate(DT))
+            if (!IsFutureDate(DT.ToLocalTime().AddHours(-1)))
                 return;
 
             System.Timers.Timer PingTimer = new System.Timers.Timer();
@@ -98,7 +118,7 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
         private void PingTimerCallback(object sender, ElapsedEventArgs e, DiscordThreadChannel Channel)
         {
             Channel.SendMessageAsync("This contract will commence in 1 hour! See you there!\n" +
-                RVN.GetRoleAsync(1006063651297447996).Result.Mention); //TODO: update to Member role
+                RVN.GetRoleAsync(822286304657932289).Result.Mention); //TODO: update to Member role
         }
         private void EventTimerCallback(object sender, ElapsedEventArgs e, DiscordScheduledGuildEvent _event)
         {

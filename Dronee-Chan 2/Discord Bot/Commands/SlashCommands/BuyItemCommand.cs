@@ -47,8 +47,9 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
                 return;
             }
 
-            user.AddToInventory(Item.ID.ToString());
-            user.Currency -= amount * Item.BuyPrice;
+            for(int i = 0; i < amount; i++)
+                user.AddToInventory(Item.ID.ToString());
+            user.Currency -= (amount * Item.BuyPrice);
 
             EventManager.SaveUser(user);
 

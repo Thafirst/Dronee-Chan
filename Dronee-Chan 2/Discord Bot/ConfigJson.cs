@@ -11,6 +11,8 @@ namespace Dronee_Chan_2.Discord_Bot
     {
         [JsonProperty("token")]
         public string Token { get; private set; }
+        [JsonProperty("testtoken")]
+        public string TestToken { get; private set; }
         [JsonProperty("prefix")]
         public string Prefix { get; private set; }
         [JsonProperty("firetoken")]

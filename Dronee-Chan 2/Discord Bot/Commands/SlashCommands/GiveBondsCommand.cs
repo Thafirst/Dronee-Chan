@@ -22,7 +22,7 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
         {
             await ctx.DeferResponseAsync();
 
-            var value = await EventManager.GetBonds(char.Parse(Type));
+            var value = await EventManager.GetBonds(char.Parse(Type.ToUpper()));
 
             ulong ID = ulong.Parse(SID);
 

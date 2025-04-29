@@ -19,7 +19,9 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
         {
             await ctx.DeferResponseAsync();
 
-            await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent("Pong"));
+            string message = "__**Available ID Card Ranks are as follows:**__\r\n\r\nCivilian (1 - 10)\r\nRecruit (11 - 20)\r\nEnlisted (21 - 30)\r\nMercenary (31 - 40)\r\nProfessional (41 - 50)\r\nVeteran (51 - 60)\r\nAce (61 - 70)\r\nWarlord (71 - 80)\r\nElite (81 - 90)\r\nLegend (91 - 100)\r\nMyth (101)";
+
+            await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent(message));
         }
     }
 }

@@ -16,8 +16,8 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
         [Command("Post")]
         [RequireRolesSlash(RoleCheckMode.Any, "Staff+")]
         [RequireSpecificGuildSlash(GuildCheckMode.Any, 734214744818581575, 1006058186136096798)]
-        public async Task Post(CommandContext ctx, [Option("ChannelID", "The UUID of the Channel of the message.", true)] string SChannelID,
-                                                                        [Option("Message", "The message to send.", true)] string message)
+        public async Task Post(CommandContext ctx, [Option("MessageID", "The ID of the message to send.", true)] string SMessageID, 
+                                                   [Option("ChannelID", "The UUID of the Channel of the message.", true)] string SChannelID)
         {
             await ctx.DeferResponseAsync();
             ulong channelID = 0;
@@ -30,9 +30,29 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
                 return;
             }
 
-            await ctx.Guild.GetChannelAsync(channelID).Result.SendMessageAsync(message);
+            DiscordChannel channel = await ctx.Guild.GetChannelAsync(channelID);
 
-            await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent("The message has been sent!"));
+            var split = SMessageID.Split(' ');
+            var messages = split;
+
+            for(int i = 0; i < split.Length; i++)
+            {
+                messages[i] = ctx.Channel.GetMessageAsync(ulong.Parse(split[i])).Result.Content;
+
+                if (messages[i].Length > 1950)
+                {
+                    await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent("The message " + split[i] + " was too long at " + messages[i].Length + " characters (1950 cap)"));
+                    return;
+                }
+            }
+
+            for(int i = 0; i < messages.Length; i++)
+            {
+                await channel.SendMessageAsync(messages[i]);
+            }
+
+
+            await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent("The message(s) has been sent!"));
         }
     }
 }

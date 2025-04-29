@@ -19,7 +19,13 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
         {
             await ctx.DeferResponseAsync();
 
-            await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent("Pong"));
+            string message = "__**\"Is X module good ? \" / \"Should I buy X module ? \"**__ \r\n\r\nThere is never a correct " +
+                "answer to this question that anybody other than yourself can give - think about what it is that you want to " +
+                "do in DCS, and especially what kind of aircraft you like, and base your decisions from that and some research." +
+                "\r\n\r\nThere is also the ability to trial modules individually for two weeks on the standalone version of DCS, " +
+                "which we highly recommend.";
+
+            await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent(message));
         }
     }
 }

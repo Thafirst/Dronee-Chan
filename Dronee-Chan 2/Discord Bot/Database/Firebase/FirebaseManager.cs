@@ -1,6 +1,7 @@
 ﻿using Dronee_Chan_2.Discord_Bot.Objects.UserObjects;
 using Firebase.Database;
 using Firebase.Database.Query;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,9 @@ namespace Dronee_Chan_2.Discord_Bot.Database.Firebase
             if (user == null)
                 throw new ArgumentNullException(nameof(user));
 
-            string userJson = user.ToJson();
+            string userJson = JsonConvert.ToString(user.ToJson());
+
+            Console.WriteLine("Saving User JSON: " + userJson);
 
             await _firebaseClient.Child("users").Child(user.DiscordUUID.ToString()).PutAsync(userJson);
         }

@@ -32,7 +32,7 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
 
         private async void CleanContracts()
         {
-            DiscordForumChannel channel = (DiscordForumChannel)RVN.GetChannelAsync(1251217697379979375).Result; //TODO: Fix to Contracts channel
+            DiscordForumChannel channel = (DiscordForumChannel)RVN.GetChannelAsync(1019938900036305029).Result; //TODO: Fix to Contracts channel
 
             foreach (var message in channel.Threads.ToList())
             {
@@ -45,7 +45,7 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
 
         private async void AutoEventHandling()
         {
-            var messages = RVN.GetChannelAsync(1251241109951217794).Result.GetMessagesAsync(); // TODO: Change to Event Management channel in RVNSPR
+            var messages = RVN.GetChannelAsync(1104088644106592348).Result.GetMessagesAsync(); // TODO: Change to Event Management channel in RVNSPR
 
             await foreach (var message in messages)
             {
@@ -94,7 +94,7 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
         private async void PostContractEvent_PostContractEventRaised(string contract, string unixTimeStamp)
         {
 
-            DiscordForumChannel DFC = (DiscordForumChannel)RVN.GetChannelAsync(1251217697379979375).Result; //TODO: update to RVN contract channel
+            DiscordForumChannel DFC = (DiscordForumChannel)await RVN.GetChannelAsync(1019938900036305029); //TODO: update to RVN contract channel
 
             string ContractText = getContractText(contract);
 

@@ -29,33 +29,35 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
 
         private void ButtonPressedEvent_ButtonPressedEventRaised(DSharpPlus.EventArgs.InteractionCreatedEventArgs args)
         {
+            if (!args.Interaction.Data.CustomId.Contains("EventManagement"))
+                return;
 
-            if (args.Interaction.Channel.Id != 1251241109951217794) //TODO: Change to RVN Event Management channel
+            if (args.Interaction.Channel.Id != 1104088644106592348) //TODO: Change to RVN Event Management channel
                 return;
 
             var buttonID = args.Interaction.Data.CustomId;
 
             switch(Enum.Parse(typeof(EventManagementEnums),buttonID))
             {
-                case EventManagementEnums.New:
+                case EventManagementEnums.NewEventManagement:
                     CreateNewEvent();
                     break;
-                case EventManagementEnums.Edit:
+                case EventManagementEnums.EditEventManagement:
                     EditEvent(args.Interaction.Message);
                     break;
-                case EventManagementEnums.Event:
+                case EventManagementEnums.EventEventManagement:
                     SetEvent(args.Interaction.Message.Id, args.Interaction.Data.Values[0]);
                     break;
-                case EventManagementEnums.Day:
+                case EventManagementEnums.DayEventManagement:
                     SetDay(args.Interaction.Message.Id, args.Interaction.Data.Values[0]);
                     break;
-                case EventManagementEnums.Time:
+                case EventManagementEnums.TimeEventManagement:
                     SetTime(args.Interaction.Message.Id, args.Interaction.Data.Values[0]);
                     break;
-                case EventManagementEnums.Finalize:
+                case EventManagementEnums.FinalizeEventManagement:
                     FinalizeEvent(args.Interaction.Message);
                     break;
-                case EventManagementEnums.Delete:
+                case EventManagementEnums.DeleteEventManagement:
                     DeleteEvent(args.Interaction.Message);
                     break;
             }
@@ -63,7 +65,7 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
 
         private async void CreateNewEvent()
         {
-            DiscordMessage message = await RVN.GetChannelAsync(1251241109951217794).Result.SendMessageAsync("Fill out Event");
+            DiscordMessage message = await RVN.GetChannelAsync(1104088644106592348).Result.SendMessageAsync("Fill out Event");
             AddDropdown(message);
         }
 
@@ -94,14 +96,18 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
 
             string message = EventDetails[discordMessage.Id + "Event"] + "\n" + EventDetails[discordMessage.Id + "Day"] + "\n" + EventDetails[discordMessage.Id + "Time"];
 
-            var editButton = new DiscordButtonComponent(DiscordButtonStyle.Primary, EventManagementEnums.Edit.ToString(), "Edit");
-            var deleteButton = new DiscordButtonComponent(DiscordButtonStyle.Danger, EventManagementEnums.Delete.ToString(), "Delete");
+            var editButton = new DiscordButtonComponent(DiscordButtonStyle.Primary, EventManagementEnums.EditEventManagement.ToString(), "Edit");
+            var deleteButton = new DiscordButtonComponent(DiscordButtonStyle.Danger, EventManagementEnums.DeleteEventManagement.ToString(), "Delete");
 
             var builder = new DiscordMessageBuilder()
                 .WithContent(message)
                 .AddComponents([editButton, deleteButton]);
 
             await discordMessage.ModifyAsync(builder);
+
+            EventDetails.Remove(discordMessage.Id + "Event");
+            EventDetails.Remove(discordMessage.Id + "Day");
+            EventDetails.Remove(discordMessage.Id + "Time");
         }
 
         private async void DeleteEvent(DiscordMessage? discordMessage)
@@ -122,11 +128,14 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
         private async void AddDropdown(DiscordMessage message)
         {
             string eventsMessage = DC_Lair.GetChannelAsync(1104199917813112882) //Events Channel
-                .Result.GetMessageAsync(1104200190551932928).Result.Content; 
+                .Result.GetMessageAsync(1104200190551932928).Result.Content;
 
-            if(eventsMessage != "Fill out Event")
+
+
+            var eventOptions = new string[] {"0","0","0"};
+            if (message.Content != "Fill out Event")
             {
-                var eventOptions = eventsMessage.Split('\n');
+                eventOptions = message.Content.Split('\n');
                 AddToEvent(message.Id + "Event", eventOptions[0]);
                 AddToEvent(message.Id + "Day", eventOptions[1]);
                 AddToEvent(message.Id + "Time", eventOptions[2]);
@@ -213,11 +222,24 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
                     "00.30", "00.30"),
             };
 
-            var EventDropdown = new DiscordSelectComponent(EventManagementEnums.Event.ToString(), "Select an event", events);
-            var DayDropdown = new DiscordSelectComponent(EventManagementEnums.Day.ToString(), "Select a day", days);
-            var TimeDropdown = new DiscordSelectComponent(EventManagementEnums.Time.ToString(), "Select a time", time);
+            string placeholder = "Select an event";
+            if (eventOptions[0] != "0")
+                placeholder = eventOptions[0];
+            var EventDropdown = new DiscordSelectComponent(EventManagementEnums.EventEventManagement.ToString(), placeholder, events);
 
-            var button = new DiscordButtonComponent(DiscordButtonStyle.Primary, EventManagementEnums.Finalize.ToString(), "Finalize");
+            placeholder = "Select an day";
+            if (eventOptions[1] != "0")
+                placeholder = eventOptions[1];
+            var DayDropdown = new DiscordSelectComponent(EventManagementEnums.DayEventManagement.ToString(), placeholder, days);
+
+            placeholder = "Select an time";
+            if (eventOptions[2] != "0")
+                placeholder = eventOptions[2];
+            var TimeDropdown = new DiscordSelectComponent(EventManagementEnums.TimeEventManagement.ToString(), placeholder, time);
+
+            
+
+            var button = new DiscordButtonComponent(DiscordButtonStyle.Primary, EventManagementEnums.FinalizeEventManagement.ToString(), "Finalize");
 
             var builder = new DiscordMessageBuilder()
                 .WithContent(message.Content)

@@ -1,7 +1,6 @@
 ﻿using Dronee_Chan_2.Discord_Bot.Attributes;
 using Dronee_Chan_2.Discord_Bot.Events;
 using DSharpPlus.Commands;
-using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using System;
 using System.Collections.Generic;
@@ -11,18 +10,18 @@ using System.Threading.Tasks;
 
 namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
 {
-    internal class PostContractCommand : ApplicationCommandModule
+    internal class GetPRatingCommand : ApplicationCommandModule
     {
-        [Command("PostContract")]
+        [Command("GetPRating")]
         [RequireRolesSlash(RoleCheckMode.Any, "Staff+")]
         [RequireSpecificGuildSlash(GuildCheckMode.Any, 734214744818581575, 1006058186136096798)]
-        public async Task PostContract(CommandContext ctx, [Option("Event", "Name of the event to post.")] string Name, [Option("Unixtimestamp", "the Unix timestamp for the time for the event.")] long UnixTimestamp)
+        public async Task GetPRating(CommandContext ctx, [Option("ID", "The discord UUID of the person")] string SID)
         {
             await ctx.DeferResponseAsync();
 
-            PostContractEvent.PostContract(Name, UnixTimestamp.ToString());
+            string response = await PRatingEvents.GetPRating(ulong.Parse(SID));
 
-            await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent("Contract has been posted."));
+            await ctx.EditResponseAsync("Current PRating of this person is: " + response);
         }
     }
 }

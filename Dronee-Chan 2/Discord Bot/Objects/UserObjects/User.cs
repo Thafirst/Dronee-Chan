@@ -22,6 +22,7 @@ namespace Dronee_Chan_2.Discord_Bot.Objects.UserObjects
         public Dictionary<string, string> OnboardingQuestChoices { get; set; }  // Onboarding quest choices
         public int OnboardingQuestMistakes { get; set; }  // Onboarding quest choices
         public bool Infected { get; set; }  // If the user if infected
+        public string PRating { get; set; }  // The P.Rating of the pilot
 
 
         public User() { }
@@ -42,6 +43,7 @@ namespace Dronee_Chan_2.Discord_Bot.Objects.UserObjects
             OnboardingQuestChoices = deserializedUser.OnboardingQuestChoices;
             OnboardingQuestMistakes = deserializedUser.OnboardingQuestMistakes;
             Infected = deserializedUser.Infected;
+            PRating = deserializedUser.PRating;
         }
         [JsonConstructor]
         public User(ulong discordUUID)
@@ -58,6 +60,7 @@ namespace Dronee_Chan_2.Discord_Bot.Objects.UserObjects
             OnboardingQuestChoices = new Dictionary<string, string>();
             OnboardingQuestMistakes = 0;
             Infected = false;
+            PRating = "50,50,50,50,50,-";
         }
         public string ToJson()
         {

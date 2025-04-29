@@ -8,13 +8,13 @@ namespace Dronee_Chan_2.Discord_Bot.Enums
 {
     public enum EventManagementEnums
     {
-        None,
-        New,
-        Edit,
-        Finalize,
-        Event,
-        Day,
-        Time,
-        Delete
+        NoneEventManagement,
+        NewEventManagement,
+        EditEventManagement,
+        FinalizeEventManagement,
+        EventEventManagement,
+        DayEventManagement,
+        TimeEventManagement,
+        DeleteEventManagement
     }
 }

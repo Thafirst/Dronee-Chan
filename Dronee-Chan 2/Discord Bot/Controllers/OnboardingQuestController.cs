@@ -66,8 +66,15 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
             EventManager.SaveUser(user);
         }
 
+        Dictionary<ulong, DateTime> UsersProcessing = new Dictionary<ulong, DateTime>();
+
         private void HandleButton(string ID, ulong userID, DiscordChannel channel)
         {
+            //Console.WriteLine(DateTime.Now.Ticks);
+            if (UsersProcessing.ContainsKey(userID) && DateTime.Now.AddSeconds(-3) <= UsersProcessing[userID]) return;
+            UsersProcessing[userID] = DateTime.Now;
+            if (ID == OnboardingQuestEnums.StartOnboardingQuest.ToString())
+                StartOnboardingQuestEvent.StartOnboardingQuest(userID);
             if (ID == OnboardingQuestEnums.FirstContinueButtonOnboardingQuest.ToString())
                 QuestOneContinue(userID, channel);
             if (ID == OnboardingQuestEnums.SecondContinueButtonOnboardingQuest.ToString())
@@ -78,6 +85,8 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
                 QuestFourContinue(userID, channel);
             if (ID == OnboardingQuestEnums.SubmitButtonOnboardingQuest.ToString())
                 QuestEnd(userID, channel);
+
+            //UsersProcessing[userID] = null;
         }
 
         private async void QuestOneContinue(ulong userID, DiscordChannel channel)
@@ -164,17 +173,21 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
 
         private async void QuestEnd(ulong userID, DiscordChannel channel)
         {
+            DiscordChannel chat = await RVN.GetChannelAsync(734214744818581578);
+
             DiscordMember discordUser = await RVN.GetMemberAsync(userID);
 
-            DiscordRole memberRole = await RVN.GetRoleAsync(1230931404775489576); //TODO: Change to Member role
-            DiscordRole newRole = await RVN.GetRoleAsync(1006063552941002842); //TODO: Change to New role
-            DiscordRole questingRole = await RVN.GetRoleAsync(1230931522291241040); //TODO: Change to Questing role
+            DiscordRole memberRole = await RVN.GetRoleAsync(822286304657932289); //TODO: Change to Member role
+            DiscordRole newRole = await RVN.GetRoleAsync(1038172335989080094); //TODO: Change to New role
+            DiscordRole questingRole = await RVN.GetRoleAsync(1203055886713495663); //TODO: Change to Questing role
 
             await channel.DeleteAsync();
 
             await discordUser.RevokeRoleAsync(questingRole);
             await discordUser.GrantRoleAsync(newRole);
             await discordUser.GrantRoleAsync(memberRole);
+
+            await chat.SendMessageAsync("Welcome to the Ravenspear " + discordUser.Mention + "! Hope to see you in the air soon!");
         }
 
         private async void DenyUser(User user)
@@ -188,8 +201,8 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
                 await discordChannel.DeleteAsync();
 
             DiscordMember discordUser = await RVN.GetMemberAsync(user.DiscordUUID);
-            DiscordRole questingRole = await RVN.GetRoleAsync(1230931522291241040); //TODO: Change to Questing role
-            DiscordRole denyRole = await RVN.GetRoleAsync(1277522729540653087); //TODO: Change to Questing role
+            DiscordRole questingRole = await RVN.GetRoleAsync(1203055886713495663); //TODO: Change to Questing role
+            DiscordRole denyRole = await RVN.GetRoleAsync(1060970750867152896); //TODO: Change to Denied role
             await discordUser.RevokeRoleAsync(questingRole);
             await discordUser.GrantRoleAsync(denyRole);
         }
@@ -212,14 +225,14 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
             //Thread.Sleep(2000);
 
             DiscordOverwriteBuilder EveryoneDOB = new DiscordOverwriteBuilder(RVN.EveryoneRole).Deny(DiscordPermissions.All);
-            DiscordOverwriteBuilder UserDOB = new DiscordOverwriteBuilder(user).Allow(DiscordPermissions.AccessChannels).Allow(DiscordPermissions.ReadMessageHistory);
+            DiscordOverwriteBuilder UserDOB = new DiscordOverwriteBuilder(user).Allow(DiscordPermission.ViewChannel).Allow(DiscordPermission.ReadMessageHistory);
 
-            DiscordChannel channel = await RVN.CreateTextChannelAsync(user.Username + " " + user.Id, await RVN.GetChannelAsync(1006058186677170247) //TODO: change to ID: // Onboarding Category
+            DiscordChannel channel = await RVN.CreateTextChannelAsync(user.Username + " " + user.Id, await RVN.GetChannelAsync(1101604146861322260) //TODO: change to ID: // Onboarding Category
                 , overwrites: [EveryoneDOB, UserDOB]);
 
             PostQuest_1(channel, user.Id);
 
-            await user.GrantRoleAsync(await RVN.GetRoleAsync(1230931522291241040)); //TODO: Change to ID: //Questing Role
+            await user.GrantRoleAsync(await RVN.GetRoleAsync(1203055886713495663)); //TODO: Change to ID: //Questing Role
         }
 
         private async void PostQuest_1(DiscordChannel channel, ulong userID)

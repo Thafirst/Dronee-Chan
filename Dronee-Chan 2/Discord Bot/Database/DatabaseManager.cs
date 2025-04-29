@@ -45,6 +45,7 @@ namespace Dronee_Chan_2.Discord_Bot.Database
             var result = FirebaseManager.GetUserAsync(UUID).Result;
             if (result == null)
             {
+                Console.WriteLine("User was Null, creating new.");
                 User user = new User(UUID);
                 EventManager.SaveUser(user);
                 return Task.FromResult(user);

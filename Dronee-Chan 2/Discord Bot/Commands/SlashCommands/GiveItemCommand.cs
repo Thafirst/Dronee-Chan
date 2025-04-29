@@ -35,7 +35,7 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
                 return;
             }
 
-            if(user.Inventory.Count > 9)
+            if(user.Inventory.Count >= 15)
             {
                 await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent(ctx.Guild.GetMemberAsync(user.DiscordUUID).Result.Username + " does not have room for any items in their inventory."));
                 return;

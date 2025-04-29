@@ -48,7 +48,7 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
             await foreach (DiscordMessage message in messages)
             {
                 Item item = ConvertFromMessage(message);
-                if (item != null && item.Name == Name)
+                if (item != null && item.Name.ToLower() == Name.ToLower())
                 {
                     return item;
                 }

@@ -23,7 +23,7 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
 
         private void MessageCreatedEvent_MessageCreatedEventRaised(MessageCreatedEventArgs args)
         {
-            if (args.Author.Id != 964940458910416997 || !args.Message.Content.Contains("**CONTRACT AVAILABLE**")) //TODO: Fix to actual DC id instead of DC-Test
+            if (args.Author.Id != 964940458910416997 && args.Author.Id != 898056364688039946 || !args.Message.Content.Contains("**CONTRACT AVAILABLE**"))
                 return;
 
             MakeContractEvent(args.Message);
@@ -38,7 +38,7 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
 
             DateTime time = UnixTimeStampToDateTime(double.Parse(timestamp));
 
-            await RVN.CreateEventAsync(name, description, 1263915180224413717, DiscordScheduledGuildEventType.VoiceChannel, DiscordScheduledGuildEventPrivacyLevel.GuildOnly, time, null);
+            await RVN.CreateEventAsync(name, description, 856872854234726440, DiscordScheduledGuildEventType.VoiceChannel, DiscordScheduledGuildEventPrivacyLevel.GuildOnly, time, null);
 
         }
         public static DateTime UnixTimeStampToDateTime(double unixTimeStamp)

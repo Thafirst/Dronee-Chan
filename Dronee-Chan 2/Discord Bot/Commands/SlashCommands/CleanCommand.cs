@@ -34,6 +34,9 @@ namespace Dronee_Chan_2.Discord_Bot.Commands.SlashCommands
 
             EventManager.SaveUser(user);
 
+            DiscordRole infectedRole = await ctx.Channel.Guild.GetRoleAsync(1099018430457319565);
+            DiscordMember member = (DiscordMember)ctx.User;
+            await member.RevokeRoleAsync(infectedRole);
 
             await ctx.EditResponseAsync(new DiscordWebhookBuilder().WithContent("You have been cured of your infection!"));
         }

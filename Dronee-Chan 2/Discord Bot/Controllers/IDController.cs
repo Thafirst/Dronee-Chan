@@ -44,7 +44,7 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
             string invalidChars = System.Text.RegularExpressions.Regex.Escape(new string(System.IO.Path.GetInvalidFileNameChars()));
             string invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
 
-            return System.Text.RegularExpressions.Regex.Replace(name, invalidRegStr, "_");
+            return System.Text.RegularExpressions.Regex.Replace(name.Trim(), invalidRegStr, "_");
         }
 
         private async Task getAvatar(DiscordMember user)
@@ -77,19 +77,17 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
             {
                 if (nickname.Contains('|'))
                 {
-                    return nickname.Split('|')[1];
+                    return nickname.Split('|')[1].Trim();
                 }
-                return nickname;
+                return nickname.Trim();
             }
-            return user.Username;
+            return user.Username.Trim();
         }
 
         private async Task<string> EventManager_GenerateIDCEventRaised(User user)
         {
             Image img = mergeImages(Image.FromFile(imageList.background), Image.FromFile(imageList.logo), 0, 0);
 
-            if (user.Infected)
-                img = mergeImages(img, Image.FromFile(imageList.infected), 0, 0);
 
 
             double rank = await EventManager.CalculateRank(user);
@@ -108,7 +106,7 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
             img = mergeImages(img, Image.FromFile(imageList.awardFrame), 0, 0);
             img = mergeImages(img, Image.FromFile(imageList.ribbonsBackground), 0, 0);
             img = mergeImages(img, Image.FromFile(imageList.XPBar), 0, 0);
-            if (user.IsVIP)
+            if (user.IsVIP || DiscordGuild.GetMemberAsync(user.DiscordUUID).Result.Roles.Any(role => role.Id == 889952510620606495))
                 img = mergeImages(img, Image.FromFile(imageList.VIP), 0, 0);
 
             //inventory
@@ -172,7 +170,11 @@ namespace Dronee_Chan_2.Discord_Bot.Controllers
             img = addTextToImage(img, user.DiscordUUID + "", new Font("AmarilloUSAF", 15), new SolidBrush(Color.FromArgb(127, 0, 0)), new PointF(520f, 11f), format);
             format.Alignment = StringAlignment.Center;
             img = addTextToImage(img, findRankName((int)rank), new Font("AmarilloUSAF", 20), new SolidBrush(Color.FromArgb(127, 0, 0)), new PointF(505f, 490f), format);
+            img = addTextToImage(img, "MEDALS", new Font("AmarilloUSAF", 20), new SolidBrush(Color.FromArgb(13, 14, 15)), new PointF(440f, 100f), format);
+            img = addTextToImage(img, "PR: " + PRatingEvents.GetPRating(user.DiscordUUID).Result, new Font("AmarilloUSAF", 15), new SolidBrush(Color.FromArgb(13, 14, 15)), new PointF(400f, 440f), format);
 
+            if (user.Infected || DiscordGuild.GetMemberAsync(user.DiscordUUID).Result.Roles.Any(role => role.Id == 1099018430457319565))
+                img = mergeImages(img, Image.FromFile(imageList.infected), 0, 0);
 
             img.Save(imageList.Result, ImageFormat.Png);
             return imageList.Result;

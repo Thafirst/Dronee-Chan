@@ -15,6 +15,9 @@ namespace Dronee_Chan_2.Discord_Bot.Enums
         [EnumMember(Value = "UnknownOnboardingQuest")]
         UnknownOnboardingQuest,
 
+        [EnumMember(Value = "StartOnboardingQuest")]
+        StartOnboardingQuest,
+
         [EnumMember(Value = "FirstQuestOnboardingQuest")]
         FirstQuestOnboardingQuest,
 
